@@ -46,7 +46,7 @@ in_island_browser_audit:
       collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/timeline`"
       collectRequestHeaders:
         - name: Api-Key
-          value: changeme
+          value: "`${C.vars['island_browser_api_key']}`"
       collectRequestParams:
         - name: Start
           value: "`${new Date(state.latestTime || earliest || (Date.now() -
@@ -64,8 +64,8 @@ in_island_browser_audit:
       disabled: true
     throttleRatePerSec: "0"
     metadata:
-      - name: __collector_type
-        value: "'cribl-island-browser.audit'"
+      - name: __packsource
+        value: "'cribl-island-browser-rest-io.audit'"
       - name: sourcetype
         value: "'island:browser:audit'"
     breakerRulesets:
@@ -120,9 +120,9 @@ in_island_browser_devices:
       collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/devices`"
       collectRequestHeaders:
         - name: Api-Key
-          value: changeme
+          value: "`${C.vars['island_browser_api_key']}`"
         - name: Content-Type
-          value: changeme
+          value: "'application/json'"
       collectRequestParams: []
       collectBody: '`{"Limit":100,"Offset":0,"SortBy":"LastSeen","SortDirection":"Asc"}`'
     destructive: false
@@ -136,8 +136,8 @@ in_island_browser_devices:
       disabled: true
     throttleRatePerSec: "0"
     metadata:
-      - name: __collector_type
-        value: "'cribl-island-browser.devices'"
+      - name: __packsource
+        value: "'cribl-island-browser-rest-io.devices'"
       - name: sourcetype
         value: "'island:browser:devices'"
     breakerRulesets:
@@ -192,7 +192,7 @@ in_island_browser_users:
       collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/users`"
       collectRequestHeaders:
         - name: Api-Key
-          value: changeme
+          value: "`${C.vars['island_browser_api_key']}`"
       collectRequestParams:
         - name: SortBy
           value: "'CreatedDate'"
@@ -211,8 +211,8 @@ in_island_browser_users:
       disabled: true
     throttleRatePerSec: "0"
     metadata:
-      - name: __collector_type
-        value: "'cribl-island-browser.users'"
+      - name: __packsource
+        value: "'cribl-island-browser-rest-io.users'"
       - name: sourcetype
         value: "'island:browser:users'"
     breakerRulesets:
@@ -268,9 +268,9 @@ in_island_browser_compromised_credentials:
         credentials`"
       collectRequestHeaders:
         - name: Api-Key
-          value: changeme
+          value: "`${C.vars['island_browser_api_key']}`"
         - name: Content-Type
-          value: changeme
+          value: "'application/json'"
       collectRequestParams:
         - name: start
           value: "`${new Date(state.latestTime || earliest || (Date.now() -
@@ -289,8 +289,8 @@ in_island_browser_compromised_credentials:
       disabled: true
     throttleRatePerSec: "0"
     metadata:
-      - name: __collector_type
-        value: "'cribl-island-browser.compromised_credentials'"
+      - name: __packsource
+        value: "'cribl-island-browser-rest-io.compromised_credentials'"
       - name: sourcetype
         value: "'island:browser:compromised_credentials'"
     breakerRulesets:

@@ -1,1 +1,1 @@
-{"name":"Island_Browser_REST_Collector_Pack","version":"0.0.1","minLogStreamVersion":"4.15.1","author":"Nth Degree","displayName":"Island Browser REST Collector Pack","tags":{"streamtags":[]},"exports":[]}
+{"name":"cribl-island-browser-rest-io","version":"0.5.0","minLogStreamVersion":"4.15.1","author":"Cribl Packs Team","description":"Collector Pack to process data from the Island Browser API", "displayName":"Island Browser REST Collector IO","tags":{"streamtags":[]},"exports":[]}
