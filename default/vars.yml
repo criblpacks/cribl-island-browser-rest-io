@@ -1,0 +1,10 @@
+island_browser_api_base_url:
+  type: string
+  lib: custom
+  description: "REQUIRED: Base URL for the Island Enterprise Browser API"
+  value: "'https://management.island.io/api'"
+island_browser_api_key:
+  type: encryptedString
+  lib: custom
+  value: changeme
+  description: "REQUIRED: API key for your Island Enterprise Browser API"

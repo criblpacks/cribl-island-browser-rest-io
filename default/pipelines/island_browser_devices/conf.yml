@@ -1,0 +1,61 @@
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Process Island Browser Device events
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "Author: Nth Degree"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Parse and remove null fields
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      fieldFilterExpr: value !== '' && value !== null
+      keep: []
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Re-serialize back into _raw, keeping the activity field for faster
+        searching
+  - id: serialize
+    filter: "true"
+    disabled: null
+    conf:
+      type: json
+      dstField: _raw
+      fields:
+        - "!_*"
+        - "!host"
+        - "!source"
+        - "!sourcetype"
+        - "!cribl_*"
+        - "*"
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      remove:
+        - "*"
+      keep:
+        - _*
+        - cribl_*
+        - host
+        - source
+        - sourcetype
+description: ""

@@ -1,0 +1,299 @@
+in_island_browser_audit:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: get
+      pagination:
+        type: request_offset
+        offsetField: offset
+        limitField: limit
+        limit: 100
+        maxPages: 50
+        zeroIndexed: false
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: false
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/timeline`"
+      collectRequestHeaders:
+        - name: Api-Key
+          value: changeme
+      collectRequestParams:
+        - name: Start
+          value: "`${new Date(state.latestTime || earliest || (Date.now() -
+            (1000*3600*24*7))).toISOString()}`"
+        - name: End
+          value: "`${new Date(Date.now()).toISOString()}`"
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __collector_type
+        value: "'cribl-island-browser.audit'"
+      - name: sourcetype
+        value: "'island:browser:audit'"
+    breakerRulesets:
+      - Island Browser API Ruleset
+  savedState: {}
+  notifications: []
+in_island_browser_devices:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: post
+      pagination:
+        type: request_offset
+        offsetField: offset
+        limitField: limit
+        limit: 100
+        maxPages: 50
+        zeroIndexed: false
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: false
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/devices`"
+      collectRequestHeaders:
+        - name: Api-Key
+          value: changeme
+        - name: Content-Type
+          value: changeme
+      collectRequestParams: []
+      collectBody: '`{"Limit":100,"Offset":0,"SortBy":"LastSeen","SortDirection":"Asc"}`'
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __collector_type
+        value: "'cribl-island-browser.devices'"
+      - name: sourcetype
+        value: "'island:browser:devices'"
+    breakerRulesets:
+      - Island Browser API Ruleset
+  savedState: {}
+  notifications: []
+in_island_browser_users:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: get
+      pagination:
+        type: request_offset
+        offsetField: offset
+        limitField: limit
+        limit: 100
+        maxPages: 50
+        zeroIndexed: false
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: false
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/users`"
+      collectRequestHeaders:
+        - name: Api-Key
+          value: changeme
+      collectRequestParams:
+        - name: SortBy
+          value: "'CreatedDate'"
+        - name: SortDirection
+          value: "'Asc'"
+      collectBody: "'{\"Limit\":100,\"Offset\":0,\"SortBy\":\"LastSeen\",\"SortDirect\
+        ion\":\"Asc\"}'"
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __collector_type
+        value: "'cribl-island-browser.users'"
+      - name: sourcetype
+        value: "'island:browser:users'"
+    breakerRulesets:
+      - Island Browser API Ruleset
+  savedState: {}
+  notifications: []
+in_island_browser_compromised_credentials:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: post
+      pagination:
+        type: request_offset
+        offsetField: offset
+        limitField: limit
+        limit: 100
+        maxPages: 50
+        zeroIndexed: false
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: false
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/compromised-\
+        credentials`"
+      collectRequestHeaders:
+        - name: Api-Key
+          value: changeme
+        - name: Content-Type
+          value: changeme
+      collectRequestParams:
+        - name: start
+          value: "`${new Date(state.latestTime || earliest || (Date.now() -
+            (1000*3600*24*7))).toISOString()}`"
+        - name: end
+          value: "`${new Date(Date.now()).toISOString()}`"
+      collectBody: '`{"sortBy":"CompromisedDate","sortDirection":"Asc"}`'
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __collector_type
+        value: "'cribl-island-browser.compromised_credentials'"
+      - name: sourcetype
+        value: "'island:browser:compromised_credentials'"
+    breakerRulesets:
+      - Island Browser API Ruleset
+  savedState: {}
+  notifications: []

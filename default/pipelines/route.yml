@@ -1,0 +1,59 @@
+id: default
+groups: {}
+comments: []
+routes:
+  - id: z4Uhop
+    name: island_browser_audit
+    final: true
+    disabled: false
+    pipeline: island_browser_audit
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __collector_type == 'cribl-island-browser.audit'
+    clones: []
+    output: default
+  - id: zmfLoW
+    name: island_browser_devices
+    final: true
+    disabled: false
+    pipeline: island_browser_devices
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __collector_type == 'cribl-island-browser.devices'
+    clones: []
+    output: default
+  - id: dV7JPm
+    name: island_browser_users
+    final: true
+    disabled: false
+    pipeline: island_browser_users
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __collector_type == 'cribl-island-browser.users'
+    clones: []
+    output: default
+  - id: CtSil2
+    name: island_browser_compromised_credentials
+    final: true
+    disabled: false
+    pipeline: island_browser_compromised_credentials
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __collector_type == 'cribl-island-browser.compromised_credentials'
+    clones: []
+    output: default
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    clones: []
+    output: default

@@ -1,0 +1,71 @@
+Island Browser API Ruleset:
+  lib: custom
+  minRawLength: 256
+  rules:
+    - condition: /clientEventId/.test(_raw)
+      type: json_array
+      timestampAnchorRegex: /updatedDate/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      jsonExtractAll: false
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: Audit
+      jsonArrayField: events
+    - condition: /clientEventId/.test(_raw)
+      type: json_array
+      timestampAnchorRegex: /updatedDate/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      jsonExtractAll: false
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: Compromised Credentials
+    - condition: /clientEventId/.test(_raw)
+      type: json_array
+      timestampAnchorRegex: /updatedDate/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      jsonExtractAll: false
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: Users
+    - condition: /deviceType/.test(_raw)
+      type: json_array
+      timestampAnchorRegex: /updatedDate/
+      timestamp:
+        type: current
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      jsonExtractAll: false
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: Devices
+  description: Event breaking rules for data retrieved from the Island Enterprise
+    Browser API
