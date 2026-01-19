@@ -19,7 +19,7 @@ Island Browser API Ruleset:
       eventBreakerRegex: /[\n\r]+(?!\s)/
       name: Audit
       jsonArrayField: events
-    - condition: /clientEventId/.test(_raw)
+    - condition: /breachSource/.test(_raw)
       type: json_array
       timestampAnchorRegex: /updatedDate/
       timestamp:
@@ -35,7 +35,8 @@ Island Browser API Ruleset:
       jsonExtractAll: false
       eventBreakerRegex: /[\n\r]+(?!\s)/
       name: Compromised Credentials
-    - condition: /clientEventId/.test(_raw)
+      jsonArrayField: compromisedCredentials
+    - condition: /userId/.test(_raw)
       type: json_array
       timestampAnchorRegex: /updatedDate/
       timestamp:
@@ -51,7 +52,8 @@ Island Browser API Ruleset:
       jsonExtractAll: false
       eventBreakerRegex: /[\n\r]+(?!\s)/
       name: Users
-    - condition: /deviceType/.test(_raw)
+      jsonArrayField: users
+    - condition: /deviceId/.test(_raw)
       type: json_array
       timestampAnchorRegex: /updatedDate/
       timestamp:
@@ -67,5 +69,6 @@ Island Browser API Ruleset:
       jsonExtractAll: false
       eventBreakerRegex: /[\n\r]+(?!\s)/
       name: Devices
+      jsonArrayField: devices
   description: Event breaking rules for data retrieved from the Island Enterprise
     Browser API

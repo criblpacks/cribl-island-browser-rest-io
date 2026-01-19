@@ -8,3 +8,7 @@ island_browser_api_key:
   lib: custom
   value: "YOUR_ISLAND_BROWSER_API_KEY"
   description: "REQUIRED: API key for your Island Enterprise Browser API"
+island_browser_default_splunk_index:
+  type: any
+  lib: custom
+  value: "'island_browser'"

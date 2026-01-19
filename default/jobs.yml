@@ -4,7 +4,28 @@ in_island_browser_audit:
   ignoreGroupJobsLimit: false
   removeFields: []
   resumeOnBoot: false
-  schedule: {}
+  schedule:
+    cronSchedule: "*/5 * * * *"
+    maxConcurrentRuns: 1
+    skippable: true
+    run:
+      rescheduleDroppedTasks: true
+      maxTaskReschedule: 1
+      logLevel: info
+      jobTimeout: 60m
+      mode: run
+      timeRangeType: relative
+      timeWarning: {}
+      expression: "true"
+      minTaskSize: 1MB
+      maxTaskSize: 10MB
+      stateTracking:
+        stateUpdateExpression: "__timestampExtracted !== false && {latestTime:
+          (state.latestTime || 0) > _time ? state.latestTime : _time}"
+        stateMergeExpression: "(prevState.latestTime || 0) > newState.latestTime ?
+          prevState : newState"
+        enabled: true
+    enabled: false
   streamtags: []
   workerAffinity: false
   collector:
@@ -85,7 +106,7 @@ in_island_browser_devices:
     conf:
       discovery:
         discoverType: none
-      collectMethod: post
+      collectMethod: post_with_body
       pagination:
         type: request_offset
         offsetField: offset
@@ -123,8 +144,14 @@ in_island_browser_devices:
           value: "`${C.vars['island_browser_api_key']}`"
         - name: Content-Type
           value: "'application/json'"
-      collectRequestParams: []
-      collectBody: '`{"Limit":100,"Offset":0,"SortBy":"LastSeen","SortDirection":"Asc"}`'
+          value: changeme
+      collectRequestParams:
+        - name: SortBy
+          value: "'LastSeen'"
+        - name: SortDirection
+          value: "'Asc'"
+      collectBody: '`{"Limit": 200, "Offset": 0,
+        "SortBy":"LastSeen","SortDirection":"Asc"}`'
     destructive: false
     encoding: utf8
     type: rest
@@ -225,14 +252,35 @@ in_island_browser_compromised_credentials:
   ignoreGroupJobsLimit: false
   removeFields: []
   resumeOnBoot: false
-  schedule: {}
+  schedule:
+    cronSchedule: "*/5 * * * *"
+    maxConcurrentRuns: 1
+    skippable: true
+    run:
+      rescheduleDroppedTasks: true
+      maxTaskReschedule: 1
+      logLevel: info
+      jobTimeout: 60m
+      mode: run
+      timeRangeType: relative
+      timeWarning: {}
+      expression: "true"
+      minTaskSize: 1MB
+      maxTaskSize: 10MB
+      stateTracking:
+        stateUpdateExpression: "__timestampExtracted !== false && {latestTime:
+          (state.latestTime || 0) > _time ? state.latestTime : _time}"
+        stateMergeExpression: "(prevState.latestTime || 0) > newState.latestTime ?
+          prevState : newState"
+        enabled: true
+    enabled: false
   streamtags: []
   workerAffinity: false
   collector:
     conf:
       discovery:
         discoverType: none
-      collectMethod: post
+      collectMethod: post_with_body
       pagination:
         type: request_offset
         offsetField: offset
@@ -277,7 +325,10 @@ in_island_browser_compromised_credentials:
             (1000*3600*24*7))).toISOString()}`"
         - name: end
           value: "`${new Date(Date.now()).toISOString()}`"
-      collectBody: '`{"sortBy":"CompromisedDate","sortDirection":"Asc"}`'
+      collectBody: '`{"sortBy":"CompromisedDate","sortDirection":"Desc", "start":
+        "${new Date(state.latestTime || earliest || (Date.now() -
+        (1000*3600*24*30))).toISOString()}", "end": "${new
+        Date(Date.now()).toISOString()}"}`'
     destructive: false
     encoding: utf8
     type: rest
