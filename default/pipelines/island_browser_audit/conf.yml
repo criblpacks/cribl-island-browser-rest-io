@@ -1,6 +1,9 @@
 output: default
 streamtags: []
-groups: {}
+groups:
+  IJOvXx:
+    name: Format for Splunk Output
+    index: 5
 asyncFuncTimeout: 1000
 functions:
   - id: comment
@@ -12,7 +15,7 @@ functions:
     filter: "true"
     disabled: null
     conf:
-      comment: "Author: Nth Degree"
+      comment: "Author: Cribl Packs Team"
   - id: comment
     filter: "true"
     disabled: null
@@ -27,12 +30,25 @@ functions:
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
-  - id: comment
+  - id: code
     filter: "true"
     disabled: null
     conf:
-      comment: Re-serialize back into _raw, keeping the activity field for faster
-        searching
+      maxNumOfIterations: 5000
+      activeLogSampleRate: 1
+      useUniqueLogChannel: true
+      code: >-
+        // Remove zero-length top-level arrays 
+
+        try {
+          const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
+          arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
+        } 
+
+        catch (err) {
+          __e.CRIBLERR = String(err);
+        }
+    description: "Remove zero-length top-level arrays "
   - id: serialize
     filter: "true"
     disabled: null
@@ -46,6 +62,7 @@ functions:
         - "!sourcetype"
         - "!cribl_*"
         - "*"
+    groupId: IJOvXx
   - id: eval
     filter: "true"
     disabled: null
@@ -58,4 +75,16 @@ functions:
         - host
         - source
         - sourcetype
+        - index
+      add:
+        - disabled: false
+          name: index
+          value: C.vars['island_browser_default_splunk_index']
+        - disabled: false
+          name: source
+          value: "source ? source : __packsource"
+        - disabled: false
+          name: sourcetype
+          value: sourcetype || 'island:browser:audit'
+    groupId: IJOvXx
 description: ""

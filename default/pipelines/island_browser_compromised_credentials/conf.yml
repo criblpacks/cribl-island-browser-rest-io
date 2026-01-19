@@ -1,6 +1,9 @@
 output: default
 streamtags: []
-groups: {}
+groups:
+  v4fDII:
+    name: Format for Splunk
+    index: 4
 asyncFuncTimeout: 1000
 functions:
   - id: comment
@@ -12,7 +15,7 @@ functions:
     filter: "true"
     disabled: null
     conf:
-      comment: "Author: Nth Degree"
+      comment: "Author: Cribl Packs Team"
   - id: comment
     filter: "true"
     disabled: null
@@ -27,12 +30,6 @@ functions:
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
-  - id: comment
-    filter: "true"
-    disabled: null
-    conf:
-      comment: Re-serialize back into _raw, keeping the activity field for faster
-        searching
   - id: serialize
     filter: "true"
     disabled: null
@@ -46,6 +43,7 @@ functions:
         - "!sourcetype"
         - "!cribl_*"
         - "*"
+    groupId: v4fDII
   - id: eval
     filter: "true"
     disabled: null
@@ -58,4 +56,5 @@ functions:
         - host
         - source
         - sourcetype
+    groupId: v4fDII
 description: ""

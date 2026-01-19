@@ -10,7 +10,7 @@ routes:
     description: ""
     enableOutputExpression: false
     outputExpression: null
-    filter: __collector_type == 'cribl-island-browser.audit'
+    filter: __packsource == 'cribl-island-browser-rest-io.audit'
     clones: []
     output: default
   - id: zmfLoW
@@ -21,7 +21,7 @@ routes:
     description: ""
     enableOutputExpression: false
     outputExpression: null
-    filter: __collector_type == 'cribl-island-browser.devices'
+    filter: __packsource == 'cribl-island-browser-rest-io.devices'
     clones: []
     output: default
   - id: dV7JPm
@@ -32,7 +32,7 @@ routes:
     description: ""
     enableOutputExpression: false
     outputExpression: null
-    filter: __collector_type == 'cribl-island-browser.users'
+    filter: __packsource == 'cribl-island-browser-rest-io.users'
     clones: []
     output: default
   - id: CtSil2
@@ -43,7 +43,7 @@ routes:
     description: ""
     enableOutputExpression: false
     outputExpression: null
-    filter: __collector_type == 'cribl-island-browser.compromised_credentials'
+    filter: __packsource == 'cribl-island-browser-rest-io.compromised_credentials'
     clones: []
     output: default
   - id: default
