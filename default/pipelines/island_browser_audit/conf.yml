@@ -37,14 +37,12 @@ functions:
       maxNumOfIterations: 5000
       activeLogSampleRate: 1
       useUniqueLogChannel: true
-      code: >-
+      code: |-
         // Remove zero-length top-level arrays 
-
         try {
           const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
           arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
         } 
-
         catch (err) {
           __e.CRIBLERR = String(err);
         }

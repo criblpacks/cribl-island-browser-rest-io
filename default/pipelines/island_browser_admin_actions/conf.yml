@@ -1,6 +1,9 @@
 output: default
 streamtags: []
-groups: {}
+groups:
+  hTMmms:
+    name: Format for Splunk
+    index: 4
 asyncFuncTimeout: 1000
 functions:
   - id: comment
@@ -36,6 +39,7 @@ functions:
         - "!sourcetype"
         - "!cribl_*"
         - "*"
+    groupId: hTMmms
   - id: eval
     filter: "true"
     disabled: false
@@ -48,4 +52,16 @@ functions:
         - host
         - source
         - sourcetype
+        - index
+      add:
+        - disabled: false
+          name: index
+          value: C.vars['island_browser_default_splunk_index']
+        - disabled: false
+          name: source
+          value: "source ? source : __packsource"
+        - disabled: false
+          name: sourcetype
+          value: sourcetype || 'island:browser:admin_actions'
+    groupId: hTMmms
 description: ""

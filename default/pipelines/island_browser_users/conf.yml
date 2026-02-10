@@ -8,22 +8,18 @@ asyncFuncTimeout: 1000
 functions:
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Process Island Browser User events
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: "Author: Cribl Packs Team"
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Parse and remove null fields
   - id: serde
     filter: "true"
-    disabled: null
     conf:
       mode: extract
       type: json
@@ -32,26 +28,22 @@ functions:
       keep: []
   - id: code
     filter: "true"
-    disabled: null
     conf:
       maxNumOfIterations: 5000
       activeLogSampleRate: 1
       useUniqueLogChannel: true
-      code: >-
+      code: |-
         // Remove zero-length top-level arrays 
-
         try {
           const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
           arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
         } 
-
         catch (err) {
           __e.CRIBLERR = String(err);
         }
     description: "Remove zero-length top-level arrays "
   - id: serialize
     filter: "true"
-    disabled: null
     conf:
       type: json
       dstField: _raw
@@ -65,7 +57,6 @@ functions:
     groupId: q9OMj4
   - id: eval
     filter: "true"
-    disabled: null
     conf:
       remove:
         - "*"
@@ -75,5 +66,16 @@ functions:
         - host
         - source
         - sourcetype
+        - index
+      add:
+        - disabled: false
+          name: index
+          value: C.vars['island_browser_default_splunk_index']
+        - disabled: false
+          name: source
+          value: "source ? source : __packsource"
+        - disabled: false
+          name: sourcetype
+          value: sourcetype || 'island:browser:users'
     groupId: q9OMj4
 description: ""

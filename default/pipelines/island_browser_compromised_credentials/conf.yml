@@ -8,22 +8,18 @@ asyncFuncTimeout: 1000
 functions:
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Process Island Browser Compromised Credentials events
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: "Author: Cribl Packs Team"
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Parse and remove null fields
   - id: serde
     filter: "true"
-    disabled: null
     conf:
       mode: extract
       type: json
@@ -32,7 +28,6 @@ functions:
       keep: []
   - id: serialize
     filter: "true"
-    disabled: null
     conf:
       type: json
       dstField: _raw
@@ -46,7 +41,6 @@ functions:
     groupId: v4fDII
   - id: eval
     filter: "true"
-    disabled: null
     conf:
       remove:
         - "*"
@@ -56,5 +50,16 @@ functions:
         - host
         - source
         - sourcetype
+        - index
+      add:
+        - disabled: false
+          name: index
+          value: C.vars['island_browser_default_splunk_index']
+        - disabled: false
+          name: source
+          value: "source ? source : __packsource"
+        - disabled: false
+          name: sourcetype
+          value: sourcetype || 'island:browser:compromised_credentials'
     groupId: v4fDII
 description: ""

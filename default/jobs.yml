@@ -193,7 +193,7 @@ in_island_browser_users:
       minTaskSize: 1MB
       maxTaskSize: 10MB
       stateTracking: {}
-    enabled: true
+    enabled: false
   streamtags: []
   workerAffinity: false
   collector:
@@ -394,7 +394,7 @@ in_island_browser_admin_actions:
         stateMergeExpression: "(prevState.latestTime || 0) > newState.latestTime ?
           prevState : newState"
         enabled: true
-    enabled: true
+    enabled: false
   streamtags: []
   workerAffinity: false
   collector:

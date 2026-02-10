@@ -1,0 +1,22 @@
+iZyzWZ:
+  sampleName: cribl_island_browser_compromised_credentials
+  created: 1770753080366
+  isPackOnly: true
+  size: 4509
+  numEvents: 2
+Nz5bNE:
+  sampleName: cribl_island_browser_users
+  created: 1770754076672
+  size: 1742
+  numEvents: 2
+gQvlev:
+  sampleName: cribl_island_browser_devices
+  created: 1770756099997
+  size: 3180
+  numEvents: 2
+2BTG2B:
+  sampleName: cribl_island_browser_audit
+  created: 1770756731177
+  isPackOnly: true
+  size: 2516
+  numEvents: 1
