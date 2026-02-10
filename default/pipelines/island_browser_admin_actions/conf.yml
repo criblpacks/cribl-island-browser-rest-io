@@ -1,0 +1,51 @@
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Process Island Browser Audit events
+  - id: comment
+    filter: "true"
+    conf:
+      comment: "Author: Cribl Packs Team"
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Parse and remove null fields
+  - id: serde
+    filter: "true"
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      fieldFilterExpr: value !== '' && value !== null
+      keep: []
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: _raw
+      fields:
+        - "!_*"
+        - "!host"
+        - "!source"
+        - "!sourcetype"
+        - "!cribl_*"
+        - "*"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - "*"
+      keep:
+        - _*
+        - cribl_*
+        - host
+        - source
+        - sourcetype
+description: ""
