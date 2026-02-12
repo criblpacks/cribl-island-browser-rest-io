@@ -3,55 +3,55 @@ streamtags: []
 groups:
   IJOvXx:
     name: Format for Splunk Output
-    index: 5
+    index: 7
 asyncFuncTimeout: 1000
 functions:
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Process Island Browser Audit events
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: "Author: Cribl Packs Team"
   - id: comment
     filter: "true"
-    disabled: null
     conf:
       comment: Parse and remove null fields
   - id: serde
     filter: "true"
-    disabled: null
     conf:
       mode: extract
       type: json
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Sometimes the API sends "blank" entries like {"events":[]} - drop these
+  - id: drop
+    filter: _raw == '{"events":[]}'
+    disabled: false
+    conf: {}
   - id: code
     filter: "true"
-    disabled: null
     conf:
       maxNumOfIterations: 5000
       activeLogSampleRate: 1
       useUniqueLogChannel: true
-      code: >-
+      code: |-
         // Remove zero-length top-level arrays 
-
         try {
           const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
           arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
         } 
-
         catch (err) {
           __e.CRIBLERR = String(err);
         }
     description: "Remove zero-length top-level arrays "
   - id: serialize
     filter: "true"
-    disabled: null
     conf:
       type: json
       dstField: _raw
@@ -65,7 +65,6 @@ functions:
     groupId: IJOvXx
   - id: eval
     filter: "true"
-    disabled: null
     conf:
       remove:
         - "*"

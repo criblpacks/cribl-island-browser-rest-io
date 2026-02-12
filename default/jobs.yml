@@ -70,7 +70,7 @@ in_island_browser_audit:
           value: "`${C.vars['island_browser_api_key']}`"
       collectRequestParams:
         - name: Start
-          value: "`${new Date(state.latestTime || earliest || (Date.now() -
+          value: "`${new Date(state.latestTime*1000 || earliest*1000 || (Date.now() -
             (1000*3600*24*7))).toISOString()}`"
         - name: End
           value: "`${new Date(Date.now()).toISOString()}`"
@@ -144,14 +144,14 @@ in_island_browser_devices:
           value: "`${C.vars['island_browser_api_key']}`"
         - name: Content-Type
           value: "'application/json'"
-          value: changeme
       collectRequestParams:
-        - name: SortBy
-          value: "'LastSeen'"
-        - name: SortDirection
-          value: "'Asc'"
-      collectBody: '`{"Limit": 200, "Offset": 0,
-        "SortBy":"LastSeen","SortDirection":"Asc"}`'
+        - name: LastSeen
+          value: "`${new Date(state.latestTime || earliest || (Date.now() -
+            (1000*3600*24*7))).toISOString()}`"
+      collectBody: |-
+        JSON.stringify({"Limit": 100,
+        "SortBy":"LastSeen",
+        "SortDirection":"Asc"})
     destructive: false
     encoding: utf8
     type: rest
@@ -177,7 +177,23 @@ in_island_browser_users:
   ignoreGroupJobsLimit: false
   removeFields: []
   resumeOnBoot: false
-  schedule: {}
+  schedule:
+    cronSchedule: 11 13 * * *
+    maxConcurrentRuns: 1
+    skippable: true
+    run:
+      rescheduleDroppedTasks: true
+      maxTaskReschedule: 1
+      logLevel: info
+      jobTimeout: 60m
+      mode: run
+      timeRangeType: relative
+      timeWarning: {}
+      expression: "true"
+      minTaskSize: 1MB
+      maxTaskSize: 10MB
+      stateTracking: {}
+    enabled: false
   streamtags: []
   workerAffinity: false
   collector:
@@ -253,7 +269,7 @@ in_island_browser_compromised_credentials:
   removeFields: []
   resumeOnBoot: false
   schedule:
-    cronSchedule: "*/5 * * * *"
+    cronSchedule: "*/15 * * * *"
     maxConcurrentRuns: 1
     skippable: true
     run:
@@ -325,10 +341,12 @@ in_island_browser_compromised_credentials:
             (1000*3600*24*7))).toISOString()}`"
         - name: end
           value: "`${new Date(Date.now()).toISOString()}`"
-      collectBody: '`{"sortBy":"CompromisedDate","sortDirection":"Desc", "start":
-        "${new Date(state.latestTime || earliest || (Date.now() -
-        (1000*3600*24*30))).toISOString()}", "end": "${new
-        Date(Date.now()).toISOString()}"}`'
+      collectBody: |-
+        JSON.stringify({
+        "start": `${new Date(state.latestTime*1000 || earliest*1000 || (Date.now() - (1000*3600*24*60))).toISOString()}`,
+        "end": `${new Date(Date.now()).toISOString()}`,
+        "limit": 100
+        })
     destructive: false
     encoding: utf8
     type: rest
@@ -344,6 +362,102 @@ in_island_browser_compromised_credentials:
         value: "'cribl-island-browser-rest-io.compromised_credentials'"
       - name: sourcetype
         value: "'island:browser:compromised_credentials'"
+    breakerRulesets:
+      - Island Browser API Ruleset
+  savedState: {}
+  notifications: []
+  description: Pagination not working - pulling 100 every run
+in_island_browser_admin_actions:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule:
+    cronSchedule: "*/5 * * * *"
+    maxConcurrentRuns: 1
+    skippable: true
+    run:
+      rescheduleDroppedTasks: true
+      maxTaskReschedule: 1
+      logLevel: info
+      jobTimeout: 60m
+      mode: run
+      timeRangeType: relative
+      timeWarning: {}
+      expression: "true"
+      minTaskSize: 1MB
+      maxTaskSize: 10MB
+      stateTracking:
+        stateUpdateExpression: "__timestampExtracted !== false && {latestTime:
+          (state.latestTime || 0) > _time ? state.latestTime : _time}"
+        stateMergeExpression: "(prevState.latestTime || 0) > newState.latestTime ?
+          prevState : newState"
+        enabled: true
+    enabled: false
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: get
+      pagination:
+        type: request_offset
+        offsetField: offset
+        limitField: limit
+        limit: 100
+        maxPages: 50
+        zeroIndexed: false
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: false
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      __scheduling:
+        stateTracking: {}
+      collectUrl: "`${C.vars['island_browser_api_base_url']}/external/v1/adminActions`"
+      collectRequestHeaders:
+        - name: Api-Key
+          value: "`${C.vars['island_browser_api_key']}`"
+      collectRequestParams:
+        - name: Start
+          value: "`${new Date(state.latestTime*1000 || earliest*1000 || (Date.now() -
+            (1000*3600*24*7))).toISOString()}`"
+        - name: End
+          value: "`${new Date(Date.now()).toISOString()}`"
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __packsource
+        value: "`'cribl-island-browser-rest-io.adminActions'`"
+      - name: sourcetype
+        value: "'island:browser:adminActions'"
     breakerRulesets:
       - Island Browser API Ruleset
   savedState: {}

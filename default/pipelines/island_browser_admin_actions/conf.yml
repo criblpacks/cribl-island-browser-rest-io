@@ -1,15 +1,16 @@
 output: default
 streamtags: []
 groups:
-  ZId7ms:
+  hTMmms:
     name: Format for Splunk
-    index: 4
+    index: 7
+    disabled: false
 asyncFuncTimeout: 1000
 functions:
   - id: comment
     filter: "true"
     conf:
-      comment: Process Island Browser Device events
+      comment: Process Island Browser Audit events
   - id: comment
     filter: "true"
     conf:
@@ -26,8 +27,33 @@ functions:
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Sometimes the API sends "blank" entries like {"adminActions":[]} - drop
+        these
+  - id: drop
+    filter: _raw == '{"adminActions":[]}'
+    disabled: false
+    conf: {}
+  - id: code
+    filter: "true"
+    conf:
+      maxNumOfIterations: 5000
+      activeLogSampleRate: 1
+      useUniqueLogChannel: true
+      code: |-
+        // Remove zero-length top-level arrays 
+        try {
+          const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
+          arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
+        } 
+        catch (err) {
+          __e.CRIBLERR = String(err);
+        }
   - id: serialize
     filter: "true"
+    disabled: false
     conf:
       type: json
       dstField: _raw
@@ -38,9 +64,10 @@ functions:
         - "!sourcetype"
         - "!cribl_*"
         - "*"
-    groupId: ZId7ms
+    groupId: hTMmms
   - id: eval
     filter: "true"
+    disabled: false
     conf:
       remove:
         - "*"
@@ -60,6 +87,6 @@ functions:
           value: "source ? source : __packsource"
         - disabled: false
           name: sourcetype
-          value: sourcetype || 'island:browser:devices'
-    groupId: ZId7ms
+          value: sourcetype || 'island:browser:admin_actions'
+    groupId: hTMmms
 description: ""
