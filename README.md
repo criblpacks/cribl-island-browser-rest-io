@@ -9,12 +9,14 @@ This Pack is designed to collect, process, and output Island Browser data via th
 * Compromised Credentials
 * Users
 * Devices
+* Admin Actions
 
 If the Splunk output option is enabled, data will be mapped to the following sourcetypes:
 * Audit Logs: `island:browser:audit`
 * Compromised Credentials: `island:browser:audit`
 * Users: `island:browser:users`
 * Devices: `island:browser:compromised_credentials`
+* Admin Actions: `island:browser:admin_actions`
 
 ## Deployment
 
