@@ -3,7 +3,7 @@ streamtags: []
 groups:
   q9OMj4:
     name: Format for Splunk
-    index: 5
+    index: 7
 asyncFuncTimeout: 1000
 functions:
   - id: comment
@@ -26,6 +26,14 @@ functions:
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Sometimes the API sends "blank" entries like {"users":[]} - drop these
+  - id: drop
+    filter: _raw == '{"users":[]}'
+    disabled: false
+    conf: {}
   - id: code
     filter: "true"
     conf:

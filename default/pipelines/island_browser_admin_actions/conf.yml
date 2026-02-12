@@ -3,7 +3,8 @@ streamtags: []
 groups:
   hTMmms:
     name: Format for Splunk
-    index: 4
+    index: 7
+    disabled: false
 asyncFuncTimeout: 1000
 functions:
   - id: comment
@@ -26,6 +27,30 @@ functions:
       srcField: _raw
       fieldFilterExpr: value !== '' && value !== null
       keep: []
+  - id: comment
+    filter: "true"
+    conf:
+      comment: Sometimes the API sends "blank" entries like {"adminActions":[]} - drop
+        these
+  - id: drop
+    filter: _raw == '{"adminActions":[]}'
+    disabled: false
+    conf: {}
+  - id: code
+    filter: "true"
+    conf:
+      maxNumOfIterations: 5000
+      activeLogSampleRate: 1
+      useUniqueLogChannel: true
+      code: |-
+        // Remove zero-length top-level arrays 
+        try {
+          const arrays = Object.keys(__e).filter(field => Array.isArray(__e[field]));
+          arrays.forEach(entry => __e[entry].length == 0 ? __e[entry] = undefined : true);
+        } 
+        catch (err) {
+          __e.CRIBLERR = String(err);
+        }
   - id: serialize
     filter: "true"
     disabled: false
