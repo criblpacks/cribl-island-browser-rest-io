@@ -11,7 +11,8 @@ routes:
     enableOutputExpression: false
     filter: __packsource == 'cribl-island-browser-rest-io.audit'
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: zmfLoW
     name: island_browser_devices
     final: true
@@ -21,7 +22,8 @@ routes:
     enableOutputExpression: false
     filter: __packsource == 'cribl-island-browser-rest-io.devices'
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: dV7JPm
     name: island_browser_users
     final: true
@@ -31,7 +33,8 @@ routes:
     enableOutputExpression: false
     filter: __packsource == 'cribl-island-browser-rest-io.users'
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: CtSil2
     name: island_browser_compromised_credentials
     final: true
@@ -41,7 +44,8 @@ routes:
     enableOutputExpression: false
     filter: __packsource == 'cribl-island-browser-rest-io.compromised_credentials'
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: 9uLbPN
     name: island_browser_admin_actions
     final: true
@@ -51,7 +55,8 @@ routes:
     enableOutputExpression: false
     filter: __packsource == 'cribl-island-browser-rest-io.adminActions'
     clones: []
-    output: default
+    targetContext: group
+    output: __group
   - id: default
     name: default
     final: true
