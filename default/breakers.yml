@@ -89,3 +89,21 @@ Island Browser API Ruleset:
       name: Admin Actions
   description: Event breaking rules for data retrieved from the Island Enterprise
     Browser API
+Island Audit API Ruleset:
+  lib: custom
+  minRawLength: 50
+  rules:
+    - condition: "true"
+      type: json
+      timestampAnchorRegex: /"timestamp":"/
+      timestamp:
+        type: auto
+        length: 30
+      timestampTimezone: utc
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 1048576
+      disabled: false
+      name: Island Audit (NDJSON)
+  description: Newline-delimited JSON (NDJSON) event breaking for the unified Island
+    SIEM Audit API

@@ -12,3 +12,15 @@ island_browser_default_splunk_index:
   type: any
   lib: custom
   value: "'island_browser'"
+island_audit_integration_id:
+  type: string
+  lib: custom
+  description: "REQUIRED (unified Audits API): Island integration ID — the UUID in
+    the /Audits/{id} path"
+  value: "''"
+island_audit_api_key:
+  type: encryptedString
+  lib: custom
+  description: "REQUIRED (unified Audits API): Bearer API key for the Island SIEM
+    Audit API"
+  value: "YOUR_ISLAND_AUDIT_API_KEY"

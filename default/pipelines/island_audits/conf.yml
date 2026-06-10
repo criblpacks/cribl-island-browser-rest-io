@@ -1,0 +1,12 @@
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    conf:
+      comment: "Passthrough — emit unified Island audit events unchanged. The NDJSON
+        Event Breaker already parsed each line into fields and set _time from the
+        event's timestamp. Customers add their own processing/routing downstream."
+description: Passthrough for unified Island SIEM audit events

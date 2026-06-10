@@ -8,18 +8,10 @@ This pack is built as a complete SOURCE + DESTINATION solution (identified by th
 *  *In-Pack Destination*: data is sent to one or more Destinations configured within the Pack.
   
 This Pack is designed to collect, process, and output Island Browser data via the Island Browser REST API. It currently supports the following endpoints:
-* Audit Logs
-* Compromised Credentials
-* Users
-* Devices
-* Admin Actions
 
-If the Splunk output option is enabled, data will be mapped to the following sourcetypes:
-* Audit Logs: `island:browser:audit`
-* Compromised Credentials: `island:browser:audit`
-* Users: `island:browser:users`
-* Devices: `island:browser:compromised_credentials`
-* Admin Actions: `island:browser:admin_actions`
+* **Island Audits V2 (unified)** — collects **all** Island audit types (browser, admin, system, and future types) from the unified Island SIEM Audit API in a single feed. **If you enable this collector, none of the other audit endpoints below are needed** — it supersedes them.
+* Audit Logs (Legacy) — do not connect this if you connected Island Audits V2.
+* Admin Actions (Legacy) — do not connect this if you connected Island Audits V2.
 
 ## Deployment
 
@@ -31,11 +23,7 @@ If the Splunk output option is enabled, data will be mapped to the following sou
 
 * Obtain an `API URL` and `API Key` from your Island Browser Administrator and update the Pack variables with these values (see below for details).
 * Perform a **Commit & Deploy** (required for Preview to work) and then **Run > Preview** of each Collector to verify that they work correctly.
-* Schedule the Collectors, adjusting the schedule as needed. Collectors requiring State Tracking should already have it enabled.
-
-### Configure Output Format
-
-Each data type can be configured to output data in either normalized JSON or Splunk (`_raw` + Splunk fields) format. Enable *only one* format for each pipeline.
+* Schedule the Collectors, adjusting the schedule as needed.
 
 ### Configure your Destination/Update Pack Routes
 To ensure proper data routing, you must make a choice: retain the current setting to use the Default Destination defined by your Worker Group, or define a new Destination directly inside this pack and adjust the pack's route accordingly.
@@ -46,15 +34,22 @@ Once everything is configured, perform a Commit & Deploy to enable data collecti
 ### Variables
 
 The Pack has the following variables:
-* `island_browser_api_base_url`: Island Browser API base URL e.g. `https://management.island.io/api`
-* `island_browser_api_key`: Your Island Browser API Key
-* `island_browser_default_splunk_index`: Default index for the Splunk output
+* `island_audit_integration_id`: The per-integration UUID used in the `/Audits/{id}` path (required)
+* `island_audit_api_key`: Bearer API key for the Island SIEM Audit API (required)
+
+
+## Legacy
+
+This pack retains a number of variables and pipelines from previous versions for backward compatibility with existing deployments. These are not needed for new setups — if you are starting fresh, configure only the `island_audit_*` variables and enable the **Island Audits V2** collector. Do not configure the legacy components alongside Island Audits V2.
 
 ## Upgrades
 
 Upgrading certain Cribl Packs using the same Pack ID can have unintended consequences. See [Upgrading an Existing Pack](https://docs.cribl.io/stream/packs#upgrading) for details.
 
 ## Release Notes
+
+### Version 3.0.0
+* Added **Island Audits V2** unified collector — collects all Island audit types (browser, admin, system, and future types) from the Island SIEM Audit API in a single feed. Supersedes the per-type legacy collectors.
 
 ### Version 2.0.0
 * Updated Route Destinations to "Send to Worker Group Routes". See above for details.
