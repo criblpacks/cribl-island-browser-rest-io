@@ -20,3 +20,9 @@ gQvlev:
   isPackOnly: true
   size: 2516
   numEvents: 1
+AuD1ts:
+  sampleName: cribl_island_audits
+  created: 1780486200000
+  isPackOnly: true
+  size: 6491
+  numEvents: 4

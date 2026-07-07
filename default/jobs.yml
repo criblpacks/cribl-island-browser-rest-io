@@ -462,3 +462,69 @@ in_island_browser_admin_actions:
       - Island Browser API Ruleset
   savedState: {}
   notifications: []
+in_island_audits_v2:
+  type: collection
+  ttl: 4h
+  ignoreGroupJobsLimit: false
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  description: "Unified Island audits (browser, admin, system, and future types)
+    from the SIEM Audits endpoint. Drains the destructive cursor queue each run via
+    RFC 5988 Link-header pagination; stops when a page returns no events. Supersedes
+    the per-type legacy collectors."
+  collector:
+    conf:
+      discovery:
+        discoverType: none
+      collectMethod: get
+      pagination:
+        type: response_header_link
+        nextRelationAttribute: next
+        curRelationAttribute: ""
+        maxPages: 0
+      authentication: none
+      timeout: 0
+      useRoundRobinDns: false
+      disableTimeFilter: true
+      decodeUrl: false
+      rejectUnauthorized: true
+      captureHeaders: false
+      stopOnEmptyResults: true
+      safeHeaders: []
+      retryRules:
+        type: backoff
+        interval: 1000
+        limit: 5
+        multiplier: 2
+        maxIntervalMs: 20000
+        codes:
+          - 429
+          - 503
+        enableHeader: true
+        retryConnectTimeout: false
+        retryConnectReset: false
+        retryHeaderName: retry-after
+      collectUrl: "`https://api.island.io/services/siem/api/v3/Audits/${C.vars['island_audit_integration_id']}`"
+      collectRequestHeaders:
+        - name: Authorization
+          value: "`Bearer ${C.vars['island_audit_api_key']}`"
+    destructive: false
+    encoding: utf8
+    type: rest
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
+    metadata:
+      - name: __packsource
+        value: "'cribl-island-browser-rest-io.audits'"
+    breakerRulesets:
+      - Island Audit API Ruleset
+  savedState: {}
+  notifications: []

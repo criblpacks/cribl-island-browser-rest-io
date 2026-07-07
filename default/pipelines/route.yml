@@ -57,6 +57,17 @@ routes:
     clones: []
     targetContext: group
     output: __group
+  - id: island_audits
+    name: island_audits
+    final: true
+    disabled: false
+    pipeline: island_audits
+    description: ""
+    enableOutputExpression: false
+    filter: __packsource == 'cribl-island-browser-rest-io.audits'
+    clones: []
+    targetContext: group
+    output: __group
   - id: default
     name: default
     final: true
